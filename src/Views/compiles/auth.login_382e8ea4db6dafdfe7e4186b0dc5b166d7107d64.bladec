@@ -1,0 +1,41 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title'); ?>
+ Login Page
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection('content'); ?>
+ <section class="login-area pt-100 pb-100">
+ <div class="container">
+ <div class="row">
+ <div class="col-lg-8 offset-lg-2">
+ <div class="basic-login">
+ <h3 class="text-center mb-60">Login From Here</h3>
+ <form action="#">
+ <label for="name">Email Address <span>**</span></label>
+ <input id="name" type="text" placeholder="Email address..." fdprocessedid="ppzk8">
+ <label for="pass">Password <span>**</span></label>
+ <input id="pass" type="password" placeholder="Enter password..." fdprocessedid="qbr2xl">
+ <div class="login-action mb-20 fix">
+ <span class="log-rem f-left">
+ <input id="remember" type="checkbox">
+ <label for="remember">Remember me!</label>
+ </span>
+ <span class="forgot-login f-right">
+ <a href="#">Lost your password?</a>
+ </span>
+ </div>
+ <button class="os-btn w-100" fdprocessedid="lepeli">Login Now</button>
+ <div class="or-divide"><span>or</span></div>
+ <a href="<?php echo \htmlentities($_ENV['BASE_URL']??'', ENT_QUOTES, 'UTF-8', false); ?>/register" class="os-btn os-btn-black w-100"
+ previewlistener="true">Register
+ Now</a>
+ </form>
+ </div>
+ </div>
+ </div>
+ </div>
+ </section>
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layouts.master'); } ?>
