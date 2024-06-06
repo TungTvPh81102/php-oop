@@ -64,102 +64,43 @@
 
     <section class="checkout-area pb-70">
         <div class="container">
-            <form action="#">
+            <form action="{{ url('handle-check-out') }}" method="POST">
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="checkbox-form">
                             <h3>Billing Details</h3>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <div class="country-select">
-                                        <label>Country <span class="required">*</span></label>
-                                        <select fdprocessedid="e5o8h">
-                                            <option value="volvo">bangladesh</option>
-                                            <option value="saab">Algeria</option>
-                                            <option value="mercedes">Afghanistan</option>
-                                            <option value="audi">Ghana</option>
-                                            <option value="audi2">Albania</option>
-                                            <option value="audi3">Bahrain</option>
-                                            <option value="audi4">Colombia</option>
-                                            <option value="audi5">Dominican Republic</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
                                     <div class="checkout-form-list">
-                                        <label>First Name <span class="required">*</span></label>
-                                        <input type="text" placeholder="" fdprocessedid="a4z72a">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="checkout-form-list">
-                                        <label>Last Name <span class="required">*</span></label>
-                                        <input type="text" placeholder="" fdprocessedid="f0q9j">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="checkout-form-list">
-                                        <label>Company Name</label>
-                                        <input type="text" placeholder="" fdprocessedid="9w0q4p">
+                                        <label>Full name</label>
+                                        <input name="user_name" value="{{ $_SESSION['user']['name'] ?? null }}"
+                                            type="text" placeholder="" fdprocessedid="9w0q4p">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="checkout-form-list">
                                         <label>Address <span class="required">*</span></label>
-                                        <input type="text" placeholder="Street address" fdprocessedid="j37ohl">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="checkout-form-list">
-                                        <input type="text" placeholder="Apartment, suite, unit etc. (optional)"
-                                            fdprocessedid="6js4b5">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="checkout-form-list">
-                                        <label>Town / City <span class="required">*</span></label>
-                                        <input type="text" placeholder="Town / City" fdprocessedid="riud9j">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="checkout-form-list">
-                                        <label>State / County <span class="required">*</span></label>
-                                        <input type="text" placeholder="" fdprocessedid="fsb6rf">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="checkout-form-list">
-                                        <label>Postcode / Zip <span class="required">*</span></label>
-                                        <input type="text" placeholder="Postcode / Zip" fdprocessedid="cz82g7">
+                                        <input name="user_address" value="{{ $_SESSION['user']['address'] ?? null }}"
+                                            type="text" placeholder="Street address" fdprocessedid="j37ohl">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="checkout-form-list">
                                         <label>Email Address <span class="required">*</span></label>
-                                        <input type="email" placeholder="" fdprocessedid="jjqi4g">
+                                        <input name="user_email" value="{{ $_SESSION['user']['email'] ?? null }}"
+                                            type="email" placeholder="" fdprocessedid="jjqi4g">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="checkout-form-list">
                                         <label>Phone <span class="required">*</span></label>
-                                        <input type="text" placeholder="Postcode / Zip" fdprocessedid="zmr5ld">
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="checkout-form-list create-acc">
-                                        <input id="cbox" type="checkbox">
-                                        <label>Create an account?</label>
-                                    </div>
-                                    <div id="cbox_info" class="checkout-form-list create-account">
-                                        <p>Create an account by entering the information below. If you are a returning
-                                            customer please login at the top of the page.</p>
-                                        <label>Account password <span class="required">*</span></label>
-                                        <input type="password" placeholder="password">
+                                        <input name="user_phone" value="{{ $_SESSION['user']['phone'] ?? null }}"
+                                            type="text" placeholder="Ex: 0123456789" fdprocessedid="zmr5ld">
                                     </div>
                                 </div>
                             </div>
                             <div class="different-address">
-                                <div class="ship-different-title">
+                                {{-- <div class="ship-different-title">
                                     <h3>
                                         <label>Ship to a different address?</label>
                                         <input id="ship-box" type="checkbox">
@@ -243,11 +184,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="order-notes">
                                     <div class="checkout-form-list">
                                         <label>Order Notes</label>
-                                        <textarea id="checkout-mess" cols="30" rows="10"
+                                        <textarea name="note" id="checkout-mess" cols="30" rows="10"
                                             placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
                                     </div>
                                 </div>
@@ -257,125 +198,84 @@
                     <div class="col-lg-6">
                         <div class="your-order mb-30 ">
                             <h3>Your order</h3>
-                            <div class="your-order-table table-responsive">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th class="product-name">Product</th>
-                                            <th class="product-total">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="cart_item">
-                                            <td class="product-name">
-                                                Vestibulum suscipit <strong class="product-quantity"> × 1</strong>
-                                            </td>
-                                            <td class="product-total">
-                                                <span class="amount">$165.00</span>
-                                            </td>
-                                        </tr>
-                                        <tr class="cart_item">
-                                            <td class="product-name">
-                                                Vestibulum dictum magna <strong class="product-quantity"> × 1</strong>
-                                            </td>
-                                            <td class="product-total">
-                                                <span class="amount">$50.00</span>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                    <tfoot>
-                                        <tr class="cart-subtotal">
-                                            <th>Cart Subtotal</th>
-                                            <td><span class="amount">$215.00</span></td>
-                                        </tr>
-                                        <tr class="shipping">
-                                            <th>Shipping</th>
-                                            <td>
-                                                <ul>
-                                                    <li>
-                                                        <input type="radio">
-                                                        <label>
-                                                            Flat Rate: <span class="amount">$7.00</span>
-                                                        </label>
-                                                    </li>
-                                                    <li>
-                                                        <input type="radio">
-                                                        <label>Free Shipping:</label>
-                                                    </li>
-                                                    <li></li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr class="order-total">
-                                            <th>Order Total</th>
-                                            <td><strong><span class="amount">$215.00</span></strong>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                            @if (!empty($_SESSION['cart']) || !empty($_SESSION['cart-' . $_SESSION['user']['id']]))
+                                <div class="your-order-table table-responsive">
+                                    <table class=" ">
+                                        <thead>
+                                            <tr>
+                                                <th class="product-name">Product</th>
+                                                <th class="product-name">Image</th>
+                                                <th class="product-total">Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="">
+                                            @php
+                                                $cart =
+                                                    $_SESSION['cart'] ?? $_SESSION['cart-' . $_SESSION['user']['id']];
+                                                $total = 0;
+                                            @endphp
 
-                            <div class="payment-method">
-                                <div class="accordion" id="accordionExample">
-                                    <div class="card">
-                                        <div class="card-header" id="headingOne">
-                                            <h5 class="mb-0">
-                                                <button class="btn-link" type="button" data-toggle="collapse"
-                                                    data-target="#collapseOne" aria-expanded="true"
-                                                    aria-controls="collapseOne" fdprocessedid="i1vv6r">
-                                                    Direct Bank Transfer
-                                                </button>
-                                            </h5>
-                                        </div>
-
-                                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                            data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                Make your payment directly into our bank account. Please use your Order ID
-                                                as the payment
-                                                reference. Your order won’t be
-                                                shipped until the funds have cleared in our account.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-header" id="headingTwo">
-                                            <h5 class="mb-0">
-                                                <button class="btn-link collapsed" type="button" data-toggle="collapse"
-                                                    data-target="#collapseTwo" aria-expanded="false"
-                                                    aria-controls="collapseTwo" fdprocessedid="rdjp5d">
-                                                    Cheque Payment
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                                            data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                Please send your cheque to Store Name, Store Street, Store Town, Store
-                                                State / County, Store
-                                                Postcode.
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-header" id="headingThree">
-                                            <h5 class="mb-0">
-                                                <button class="btn-link collapsed" type="button" data-toggle="collapse"
-                                                    data-target="#collapseThree" aria-expanded="false"
-                                                    aria-controls="collapseThree" fdprocessedid="gr6019">
-                                                    PayPal
-                                                </button>
-                                            </h5>
-                                        </div>
-                                        <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                                            data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                Pay via PayPal; you can pay with your credit card if you don’t have a
-                                                PayPal account.
-                                            </div>
-                                        </div>
-                                    </div>
+                                            @foreach ($cart as $item)
+                                                @php
+                                                    $subtotal =
+                                                        $item['quantity'] *
+                                                        ($item['discount'] ?: $item['price_regular']);
+                                                    $total += $subtotal;
+                                                @endphp
+                                                <tr class="cart_item">
+                                                    <td class="product-name">
+                                                        {{ $item['name'] }} <strong class="product-quantity"> ×
+                                                            {{ $item['quantity'] }}</strong>
+                                                    </td>
+                                                    <td class="product-name">
+                                                        <img width="100px" src="{{ asset($item['thumbnail']) }}"
+                                                            alt="">
+                                                    </td>
+                                                    <td class="product-total">
+                                                        <span class="amount">{{ number_format($subtotal, 0) }}
+                                                            đ</span>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot>
+                                            {{-- <tr class="cart-subtotal">
+                                                <th>Cart Subtotal</th>
+                                                <td><span class="amount">$215.00</span></td>
+                                            </tr> --}}
+                                            <tr class="shipping">
+                                                <th>Payments</th>
+                                                <td>
+                                                    <ul>
+                                                        <li>
+                                                            <input type="radio" name="payment" value="0">
+                                                            <label>
+                                                                Crash
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <input type="radio" name="payment" value="1">
+                                                            <label>Online</label>
+                                                        </li>
+                                                        <li></li>
+                                                    </ul>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr class="order-total">
+                                                <th>Order Total</th>
+                                                <td><strong><span class="amount">{{ number_format($total, 0) }}
+                                                            đ</span></strong>
+                                                    <input type="hidden" name="total_money"
+                                                        value="{{ $total }}">
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 </div>
+                            @endif
+                            <div class="payment-method">
                                 <div class="order-button-payment mt-20">
                                     <button type="submit" class="os-btn os-btn-black" fdprocessedid="xaujd">Place
                                         order</button>

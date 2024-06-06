@@ -24,23 +24,40 @@
                             <h6 class="m-0 font-weight-bold">{{ $title }}</h6>
                         </div>
                         <div class="card-body">
-                            <form action="" method="post">
+
+                            @if (isset($_SESSION['status']) && !$_SESSION['status'])
+                                <div class="alert alert-warning">{{ $_SESSION['msg'] }}</div>
+
+                                @php
+                                    unset($_SESSION['status']);
+                                    unset($_SESSION['msg']);
+                                @endphp
+                            @endif
+                            <form action="{{ url('admin/categories/store') }}" method="post">
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
                                             <label for="productname">Category name:</label>
                                             <input name="name" id="productname" type="text" class="form-control mb-3"
-                                                placeholder="Enter a category name..." value=""
+                                                placeholder="Enter a category name..."
+                                                value="{{ isset($_SESSION['data']) ? $_SESSION['data']['name'] : '' }}"
                                                 fdprocessedid="15ftra">
-                                            <span class="text-danger"></span>
+                                            <span
+                                                class="text-danger">{{ !empty($_SESSION['errors']['name']) ? $_SESSION['errors']['name'] : '' }}</span>
                                         </div>
                                         <div class="mb-3">
                                             <label for="form-select">Status:</label>
                                             <select name="status" class="form-select mb-3" fdprocessedid="m0ti7f">
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
+                                                <option value="">--- Choose status ---</option>
+                                                <option
+                                                    {{ isset($_SESSION['data']['status']) && $_SESSION['data']['status'] == 'draft' ? 'selected' : '' }}
+                                                    value="{{ $_ENV['STATUS_DRAFT'] }}">Draft</option>
+                                                <option
+                                                    {{ isset($_SESSION['data']['status']) && $_SESSION['data']['status'] == 'publish' ? 'selected' : '' }}
+                                                    value="{{ $_ENV['STATUS_PUBLISH'] }}">Publish</option>
                                             </select>
-                                            <span class="text-danger"></span>
+                                            <span
+                                                class="text-danger">{{ !empty($_SESSION['errors']['status']) ? $_SESSION['errors']['status'] : '' }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -52,8 +69,9 @@
                                     </button>
                                     <button type="reset" class="btn btn-secondary waves-effect waves-light"
                                         fdprocessedid="u0je1s">Reset</button>
-                                    <a class="btn btn-info" href="{{ $_ENV['BASE_URL_ADMIN'] }}/categories"
-                                        previewlistener="true">Back to
+                                    <a class="btn btn-info" href="{{ url('admin/categories') }}"
+                                        previewlistener="true">Back
+                                        to
                                         list</a>
                                 </div>
                             </form>
@@ -69,3 +87,8 @@
         <!-- container-fluid -->
     </div>
 @endsection
+
+@php
+    unset($_SESSION['data']);
+    unset($_SESSION['errors']);
+@endphp

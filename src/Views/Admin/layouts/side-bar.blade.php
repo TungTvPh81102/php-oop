@@ -18,7 +18,7 @@
                 <li class="menu-title" key="t-apps">Apps</li>
 
                 <li>
-                    <a href="{{ $_ENV['BASE_URL_ADMIN'] }}/categories" class="waves-effect">
+                    <a href="{{ url('admin/categories') }}" class="waves-effect">
                         <i class="bx bx-menu"></i>
                         <span key="t-ecommerce">Category Management</span>
                     </a>
@@ -35,10 +35,10 @@
                         <span key="t-ecommerce">Product Management</span>
                     </a>
                     <ul class="sub-menu mm-collapse" aria-expanded="false">
-                        <li><a href="{{ $_ENV['BASE_URL_ADMIN'] }}/products" key="t-products"
-                                previewlistener="true">List Product</a>
+                        <li><a href="{{ url('admin/products') }}" key="t-products" previewlistener="true">List
+                                Product</a>
                         </li>
-                        <li><a href="http://localhost/da1/admin/?action=colors-list" key="t-product-detail"
+                        {{-- <li><a href="" key="t-product-detail"
                                 previewlistener="true">Color</a>
                         </li>
                         <li><a href="http://localhost/da1/admin/?action=sizes-list" key="t-product-detail"
@@ -46,11 +46,11 @@
                         </li>
                         <li><a href="http://localhost/da1/admin/?action=gallerys" key="t-product-detail"
                                 previewlistener="true">Thumbnail</a>
-                        </li>
+                        </li> --}}
                     </ul>
                 </li>
                 <li>
-                    <a href="{{ $_ENV['BASE_URL_ADMIN'] }}/users" previewlistener="true" aria-expanded="false">
+                    <a href="{{ url('admin/users') }}" previewlistener="true" aria-expanded="false">
                         <i class="bx bx-user"></i>
                         <span key="t-ecommerce">User management</span>
                     </a>

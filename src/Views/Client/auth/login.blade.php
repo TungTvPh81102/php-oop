@@ -11,23 +11,32 @@
                 <div class="col-lg-8 offset-lg-2">
                     <div class="basic-login">
                         <h3 class="text-center mb-60">Login From Here</h3>
-                        <form action="#">
-                            <label for="name">Email Address <span>**</span></label>
-                            <input id="name" type="text" placeholder="Email address..." fdprocessedid="ppzk8">
-                            <label for="pass">Password <span>**</span></label>
-                            <input id="pass" type="password" placeholder="Enter password..." fdprocessedid="qbr2xl">
-                            <div class="login-action mb-20 fix">
-                                <span class="log-rem f-left">
-                                    <input id="remember" type="checkbox">
-                                    <label for="remember">Remember me!</label>
-                                </span>
-                                <span class="forgot-login f-right">
-                                    <a href="#">Lost your password?</a>
-                                </span>
+
+                        @if (isset($_SESSION['errors']) && $_SESSION['errors'])
+                            <div class="alert alert-danger">{{ $_SESSION['errors'] }}</div>
+                            @php
+                                unset($_SESSION['errors']);
+                            @endphp
+                        @endif
+
+                        <form action="{{ url('handle-login') }}" method="POST">
+                            <div class="form-group mb-3">
+                                <label for="email-id">Email Address <span>**</span></label>
+                                <input id="email-id" type="email" name="email" placeholder="Email address..."
+                                    fdprocessedid="8tsuy9m">
+                                <span
+                                    class="text-danger">{{ !empty($_SESSION['errors']['email']) ? $_SESSION['errors']['email'] : '' }}</span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="pass">Password <span>**</span></label>
+                                <input name="password" id="pass" type="password" placeholder="Enter password..."
+                                    fdprocessedid="152hur">
+                                <span
+                                    class="text-danger">{{ !empty($_SESSION['errors']['password']) ? $_SESSION['errors']['password'] : '' }}</span>
                             </div>
                             <button class="os-btn w-100" fdprocessedid="lepeli">Login Now</button>
                             <div class="or-divide"><span>or</span></div>
-                            <a href="{{ $_ENV['BASE_URL'] }}/register" class="os-btn os-btn-black w-100"
+                            <a href="{{ url('register') }}" class="os-btn os-btn-black w-100"
                                 previewlistener="true">Register
                                 Now</a>
                         </form>

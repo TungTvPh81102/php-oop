@@ -3,14 +3,30 @@
 namespace Hi\PhpOop\Controllers\Admin;
 
 use Hi\PhpOop\Commons\Controller;
+use Hi\PhpOop\Commons\Helper;
+use Hi\PhpOop\Models\Brand;
 
 class BrandController extends Controller
 {
+    private Brand $brands;
+
+    public function __construct()
+    {
+        $this->brands = new Brand();
+    }
 
     public function index()
     {
         $title = 'List Brands';
-        $this->viewAdmin('brands.index', ['title' => $title]);
+
+        $brands = $this->brands->getAll();
+
+        // Helper::dd($brands);
+
+        $this->viewAdmin('brands.index', [
+            'title' => $title,
+            'brands' => $brands,
+        ]);
     }
 
     public function create()

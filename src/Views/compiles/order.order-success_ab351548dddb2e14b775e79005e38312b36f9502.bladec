@@ -1,0 +1,26 @@
+<?php $_shouldextend[1]=1; ?>
+
+<?php $this->startSection('title'); ?>
+ Order Success
+<?php $this->stopSection(); ?>
+
+<?php $this->startSection('content'); ?>
+ <section class="coupon-area pt-100 pb-30">
+ <div class="container">
+ <div class="row">
+ <?php 
+ $vnp_SecureHash = $_GET['vnp_SecureHash'] ?? null;
+ ?>
+
+ <?php if(isset($_GET['status'])): ?>
+ <span>Đặt hàng thành công</span>
+ <?php else: ?>
+ <span>Thanh toán thất bại</span>
+ <?php endif; ?>
+ </div>
+ </div>
+ </section>
+ <h1>Đặt hàng thành công</h1>
+<?php $this->stopSection(); ?>
+
+<?php if (isset($_shouldextend[1])) { echo $this->runChild('layouts.master'); } ?>

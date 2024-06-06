@@ -134,11 +134,24 @@
                                                     <h5>My Account</h5>
                                                 </div>
                                                 <ul>
-                                                    <li><a href="{{ $_ENV['BASE_URL'] }}/login">Login</a></li>
-                                                    <li><a href="wishlist.html">Wishlist</a></li>
+                                                    @if (!is_Logged())
+                                                        <li><a href="{{ url('login') }}">Login</a></li>
+                                                    @endif
+                                                    @if (is_Logged())
+                                                        <li>
+                                                            @if (is_admin())
+                                                                <a href="{{ url('admin') }}">Dashboard</a>
+                                                            @endif
+                                                            <form action="{{ url('logout') }}" method="POST">
+                                                                <button style="background-color: transparent"
+                                                                    type="submit">Logout</button>
+                                                            </form>
+                                                        </li>
+                                                    @endif
+                                                    {{-- <li><a href="wishlist.html">Wishlist</a></li>
                                                     <li><a href="cart.html">Cart</a></li>
                                                     <li><a href="checkout.html">Checkout</a></li>
-                                                    <li><a href="register.html">Create Account</a></li>
+                                                    <li><a href="register.html">Create Account</a></li> --}}
                                                 </ul>
                                             </div>
                                         </li>

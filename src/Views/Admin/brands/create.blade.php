@@ -30,8 +30,7 @@
                                         <div class="mb-3">
                                             <label for="productname">Brand name:</label>
                                             <input name="name" id="productname" type="text" class="form-control mb-3"
-                                                placeholder="Enter a category name..." value=""
-                                                fdprocessedid="15ftra">
+                                                placeholder="Enter a brand name..." value="" fdprocessedid="15ftra">
                                             <span class="text-danger"></span>
                                         </div>
                                         <div class="mb-3">

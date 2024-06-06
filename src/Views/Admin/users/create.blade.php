@@ -24,51 +24,66 @@
                             <h6 class="m-0 font-weight-bold">{{ $title }}</h6>
                         </div>
                         <div class="card-body">
-                            <form action="" method="post" enctype="">
-                                @csrf
-
+                            <form action="{{ url('admin/users/store') }}" method="post" enctype="multipart/form-data">
                                 <div class="row">
                                     <div class="col">
                                         <div class="mb-3">
                                             <label for="productname">Full name:</label>
-                                            <input name="full_name" id="full_name" type="text" class="form-control mb-3"
-                                                placeholder="Enter a name..." value="" fdprocessedid="15ftra">
-                                            <span class="text-danger"></span>
+                                            <input name="name" id="name" type="text" class="form-control mb-3"
+                                                placeholder="Enter a name..." value="{{ old('name') ? old('name') : '' }}"
+                                                fdprocessedid="15ftra">
+                                            <span
+                                                class="text-danger">{{ !empty($_SESSION['errors']['name']) ? $_SESSION['errors']['name'] : '' }}</span>
                                         </div>
                                         <div class="mb-3">
                                             <label for="productname">Email:</label>
                                             <input name="email" id="email" type="email" class="form-control mb-3"
-                                                placeholder="Enter a email..." value="" fdprocessedid="15ftra">
-                                            <span class="text-danger"></span>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="productname">Phone number:</label>
-                                            <input name="phone" id="phone" type="number" class="form-control mb-3"
-                                                placeholder="Enter a phone..." value="" fdprocessedid="15ftra">
-                                            <span class="text-danger"></span>
+                                                placeholder="Enter a email..."
+                                                value="{{ old('email') ? old('email') : '' }}" fdprocessedid="15ftra">
+                                            <span
+                                                class="text-danger">{{ !empty($_SESSION['errors']['email']) ? $_SESSION['errors']['email'] : '' }}</span>
                                         </div>
                                         <div class="mb-3">
                                             <label for="productname">Password:</label>
                                             <input name="password" id="password" type="password" class="form-control mb-3"
-                                                placeholder="Enter a password..." value="" fdprocessedid="15ftra">
-                                            <span class="text-danger"></span>
+                                                placeholder="Enter a password..." fdprocessedid="15ftra">
+                                            <span
+                                                class="text-danger">{{ !empty($_SESSION['errors']['password']) ? $_SESSION['errors']['password'] : '' }}</span>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="productname">Avatar:</label>
                                             <input name="avatar" id="avatar" type="file" class="form-control mb-3"
                                                 value="" fdprocessedid="15ftra">
-                                            <span class="text-danger"></span>
+                                            <span
+                                                class="text-danger">{{ !empty($_SESSION['errors']['avatar']) ? $_SESSION['errors']['avatar'] : '' }}</span>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="form-select">Status:</label>
+                                            <select name="status" class="form-select mb-3" fdprocessedid="m0ti7f">
+                                                <option value="">--- Choose status ---</option>
+                                                <option value="0">
+                                                    Không kích hoạt</option>
+                                                <option selected value="1">Kích
+                                                    hoạt
+                                                </option>
+                                            </select>
+                                            <span
+                                                class="text-danger">{{ !empty($_SESSION['errors']['status']) ? $_SESSION['errors']['status'] : '' }}</span>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="form-select">Role:</label>
-                                            <select name="status" class="form-select mb-3" fdprocessedid="m0ti7f">
-                                                <option value="0">Member</option>
-                                                <option value="0">Blogger</option>
-                                                <option value="1">Admin</option>
+                                            <select name="type" class="form-select mb-3" fdprocessedid="m0ti7f">
+                                                <option value="">--- Choose type ---</option>
+                                                <option {{ !old('type') ? 'selected' : '' }}
+                                                    value="{{ $_ENV['TYPE_MEMBER'] }}">Member</option>
+                                                <option {{ old('type') ? 'selected' : '' }}
+                                                    value="{{ $_ENV['TYPE_ADMIN'] }}">Admin</option>
                                             </select>
-                                            <span class="text-danger"></span>
+                                            <span
+                                                class="text-danger">{{ !empty($_SESSION['errors']['type']) ? $_SESSION['errors']['type'] : '' }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -80,8 +95,7 @@
                                     </button>
                                     <button type="reset" class="btn btn-secondary waves-effect waves-light"
                                         fdprocessedid="u0je1s">Reset</button>
-                                    <a class="btn btn-info" href="{{ $_ENV['BASE_URL_ADMIN'] }}/users"
-                                        previewlistener="true">Back to
+                                    <a class="btn btn-info" href="{{ url('admin/users') }}" previewlistener="true">Back to
                                         list</a>
                                 </div>
                             </form>
@@ -97,3 +111,8 @@
         <!-- container-fluid -->
     </div>
 @endsection
+
+@php
+    unset($_SESSION['data']);
+    unset($_SESSION['errors']);
+@endphp

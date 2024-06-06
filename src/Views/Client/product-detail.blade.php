@@ -14,42 +14,42 @@
                             <div class="product__modal-nav mr-20">
                                 <nav>
                                     <div class="nav nav-tabs" id="product-details" role="tablist">
-                                        <a class="nav-item nav-link active" id="pro-one-tab" data-toggle="tab"
-                                            href="#pro-one" role="tab" aria-controls="pro-one" aria-selected="true">
-                                            <div class="product__nav-img w-img">
-                                                <img src="public/assets/client/assets/img/shop/product/details/details-sm-1.jpg"
-                                                    alt="">
-                                            </div>
-                                        </a>
-                                        <a class="nav-item nav-link" id="pro-two-tab" data-toggle="tab" href="#pro-two"
-                                            role="tab" aria-controls="pro-two" aria-selected="false">
-                                            <div class="product__nav-img w-img">
-                                                <img src="public/assets/client/assets/img/shop/product/quick-view/quick-sm-2.jpg"
-                                                    alt="">
-                                            </div>
-                                        </a>
-                                        <a class="nav-item nav-link" id="pro-three-tab" data-toggle="tab" href="#pro-three"
-                                            role="tab" aria-controls="pro-three" aria-selected="false">
-                                            <div class="product__nav-img w-img">
-                                                <img src="public/assets/client/assets/img/shop/product/quick-view/quick-sm-3.jpg"
-                                                    alt="">
-                                            </div>
-                                        </a>
+                                        @foreach ($gallery as $key => $value)
+                                            <a class="nav-item nav-link {{ $key == 0 ? 'active' : '' }}"
+                                                id="pro-{{ $key }}-tab" data-toggle="tab"
+                                                href="#pro-{{ $key }}" role="tab"
+                                                aria-controls="pro-{{ $key }}" aria-selected="true">
+                                                <div class="product__nav-img w-img">
+                                                    <img style="width: 100px" src="{{ asset($value) }}" alt="">
+                                                </div>
+                                            </a>
+                                        @endforeach
                                     </div>
                                 </nav>
                             </div>
                             <div class="tab-content mb-20" id="product-detailsContent">
-                                <div class="tab-pane fade show active" id="pro-one" role="tabpanel"
-                                    aria-labelledby="pro-one-tab">
-                                    <div class="product__modal-img product__thumb w-img">
-                                        <img src="public/assets/client/assets/img/shop/product/details/details-big-1.jpg"
-                                            alt="">
-                                        <div class="product__sale ">
-                                            <span class="new">new</span>
-                                            <span class="percent">-16%</span>
+                                @foreach ($gallery as $key => $value)
+                                    <div class="tab-pane fade {{ $key == 0 ? 'show active' : '' }}"
+                                        id="pro-{{ $key }}" role="tabpanel"
+                                        aria-labelledby="pro-{{ $key }}-tab">
+                                        <div class="product__modal-img product__thumb w-img">
+                                            <img src="{{ asset($value) }}" alt="">
+                                            <div class="product__sale">
+                                                <span class="new">new</span>
+                                                @if ($product['discount'] > 0)
+                                                    @php
+                                                        $percent = floor(
+                                                            (($product['price_regular'] - $product['discount']) /
+                                                                $product['price_regular']) *
+                                                                100,
+                                                        );
+                                                    @endphp
+                                                    <span class="percent">-{{ $percent }}%</span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endforeach
                                 <div class="tab-pane fade" id="pro-two" role="tabpanel" aria-labelledby="pro-two-tab">
                                     <div class="product__modal-img product__thumb w-img">
                                         <img src="public/assets/client/assets/img/shop/product/details/details-big-2.jpg"
@@ -66,7 +66,7 @@
                                             alt="">
                                         <div class="product__sale ">
                                             <span class="new">new</span>
-                                            <span class="percent">-16%</span>
+                                            <span class="percent">-26%</span>
                                         </div>
                                     </div>
                                 </div>
@@ -75,7 +75,7 @@
                     </div>
                     <div class="col-xl-6 col-lg-6">
                         <div class="product__modal-content product__modal-content-2">
-                            <h4><a href="product-details.html" previewlistener="true">Wooden container Bowl</a></h4>
+                            <h4><a href="product-details.html" previewlistener="true">{{ $product['name'] }}</a></h4>
                             <div class="rating rating-shop mb-15">
                                 <ul>
                                     <li><span><i class="fas fa-star"></i></span></li>
@@ -89,16 +89,23 @@
                                 </span>
                                 <span class="review rating-left"><a href="#">Add your Review</a></span>
                             </div>
-                            <div class="product__price-2 mb-25">
-                                <span>$96.00</span>
-                                <span class="old-price">$96.00</span>
-                            </div>
+                            @if ($product['discount'] > 0)
+                                <div class="product__price-2 mb-25">
+                                    <span>{{ number_format($product['discount'], 0) }} đ</span>
+                                    <span class="old-price">{{ number_format($product['price_regular'], 0) }}đ</span>
+                                </div>
+                            @else
+                                <div class="product__price-2 mb-25">
+                                    <span>{{ number_format($product['price_regular'], 0) }}đ</span>
+                                </div>
+                            @endif
                             <div class="product__modal-des mb-30">
-                                <p>Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum.
-                                    Mirum est notare quam littera gothica, quam nunc putamus parum claram.</p>
+                                <p>
+                                    {{ $product['description'] }}
+                                </p>
                             </div>
                             <div class="product__modal-form mb-30">
-                                <form action="#">
+                                <form action="{{ url('cart/add') }}?productId={{ $product['id'] }}" method="GET">
                                     <div class="product__modal-input size mb-20">
                                         <label>Size <i class="fas fa-star-of-life"></i></label>
                                         <select fdprocessedid="kwtgrr">
@@ -129,24 +136,22 @@
                                             <label>Quantity</label>
                                         </div>
                                         <div class="product-quantity mr-20 mb-20">
-                                            <div class="cart-plus-minus"><input type="text" value="1"
+                                            <input type="hidden" name="productId" value="{{ $product['id'] }}">
+                                            <div class="cart-plus-minus"><input name="quantity" type="number" value="1"
                                                     fdprocessedid="e0iii">
                                                 <div class="dec qtybutton">-</div>
                                                 <div class="inc qtybutton">+</div>
                                             </div>
                                         </div>
                                         <div class="pro-cart-btn">
-                                            <a href="#" class="add-cart-btn mb-20">+ Add to Cart</a>
+                                            <button type="submit" class="add-cart-btn mb-20">+ Add to Cart</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                             <div class="product__tag mb-25">
                                 <span>Category:</span>
-                                <span><a href="#">Accessories,</a></span>
-                                <span><a href="#">Gaming,</a></span>
-                                <span><a href="#">PC Computers,</a></span>
-                                <span><a href="#">Ultrabooks</a></span>
+                                <span><a href="#">{{ $product['c_name'] }}</a></span>
                             </div>
                             <div class="product__share">
                                 <span>Share :</span>
@@ -186,26 +191,7 @@
                             <div class="tab-content" id="pro-detailsContent">
                                 <div class="tab-pane fade show active" id="des" role="tabpanel">
                                     <div class="product__details-des">
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
-                                            Ipsum has been the industry's standard dummy text ever since the 1500s, when
-                                            anunknown printer took a galley of type and scrambled it to make a type specimen
-                                            book. It has survived not only five centuries, but also the leap into electronic
-                                            typesetting, remaining essentially unchanged. It was popularised in the 1960s
-                                            with the release of Letraset sheets containing Lorem Ipsum passages.</p>
-
-                                        <div class="product__details-des-list mb-20">
-                                            <ul>
-                                                <li><span>Claritas est etiam processus dynamicus.</span></li>
-                                                <li><span>Qui sequitur mutationem consuetudium lectorum.</span></li>
-                                                <li><span>Claritas est etiam processus dynamicus.</span></li>
-                                                <li><span>Qui sequitur mutationem consuetudium lectorum.</span></li>
-                                                <li><span>Claritas est etiam processus dynamicus.</span></li>
-                                                <li><span>Qui sequitur mutationem consuetudium lectorum.</span></li>
-                                            </ul>
-                                        </div>
-                                        <p>It has survived not only five centuries, but also the leap into electronic
-                                            typesetting, remaining essentially unchanged. It was popularised in the 1960s
-                                            with the release.</p>
+                                        <p> {{ $product['content'] }}</p>
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="add" role="tabpanel">

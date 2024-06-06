@@ -11,54 +11,107 @@
                 <div class="col-12">
                     <form action="#">
                         <div class="table-content table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="product-thumbnail">Images</th>
-                                        <th class="cart-product-name">Product</th>
-                                        <th class="product-price">Unit Price</th>
-                                        <th class="product-quantity">Quantity</th>
-                                        <th class="product-subtotal">Total</th>
-                                        <th class="product-remove">Remove</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="product-thumbnail"><a href="product-details.html"
-                                                previewlistener="true"><img src="assets/img/shop/product/product-2.jpg"
-                                                    alt=""></a></td>
-                                        <td class="product-name"><a href="product-details.html" previewlistener="true">Bakix
-                                                Furniture</a></td>
-                                        <td class="product-price"><span class="amount">$130.00</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus"><input type="text" value="1"
-                                                    fdprocessedid="a56y6d">
-                                                <div class="dec qtybutton">-</div>
-                                                <div class="inc qtybutton">+</div>
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal"><span class="amount">$130.00</span></td>
-                                        <td class="product-remove"><a href="#"><i class="fa fa-times"></i></a></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="product-thumbnail"><a href="product-details.html"
-                                                previewlistener="true"><img src="assets/img/shop/product/product-4.jpg"
-                                                    alt=""></a></td>
-                                        <td class="product-name"><a href="product-details.html" previewlistener="true">Sujon
-                                                Chair Set</a></td>
-                                        <td class="product-price"><span class="amount">$120.50</span></td>
-                                        <td class="product-quantity">
-                                            <div class="cart-plus-minus"><input type="text" value="1"
-                                                    fdprocessedid="cbpl9g">
-                                                <div class="dec qtybutton">-</div>
-                                                <div class="inc qtybutton">+</div>
-                                            </div>
-                                        </td>
-                                        <td class="product-subtotal"><span class="amount">$120.50</span></td>
-                                        <td class="product-remove"><a href="#"><i class="fa fa-times"></i></a></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            @if (!empty($_SESSION['cart']) || !empty($_SESSION['cart-' . $_SESSION['user']['id']]))
+                                <table class="table table-bordered ">
+                                    <thead>
+                                        <tr>
+                                            <th class="product-thumbnail">Images</th>
+                                            <th class="cart-product-name">Product</th>
+                                            <th class="product-price">Unit Price</th>
+                                            <th class="product-quantity">Quantity</th>
+                                            <th class="product-subtotal">Total</th>
+                                            <th class="product-remove">Remove</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $cart = $_SESSION['cart'] ?? $_SESSION['cart-' . $_SESSION['user']['id']];
+                                            $total = 0;
+                                        @endphp
+                                        @foreach ($cart as $item)
+                                            @php
+                                                $subtotal =
+                                                    $item['quantity'] * ($item['discount'] ?: $item['price_regular']);
+                                                $total += $subtotal;
+                                            @endphp
+                                            <tr>
+                                                <td class="product-thumbnail"><a href="product-details.html"
+                                                        previewlistener="true"><img src="{{ asset($item['thumbnail']) }}"
+                                                            alt=""></a>
+                                                </td>
+                                                <td class="product-name"><a href="product-details.html"
+                                                        previewlistener="true">{{ $item['name'] }}</a></td>
+                                                <td class="product-price"><span
+                                                        class="amount">{{ number_format($item['discount'], 0) ?: number_format($item['price_regular'], 0) }}
+                                                        đ</span>
+                                                </td>
+                                                <td class="product-quantity">
+
+                                                    <div class="d-flex">
+                                                        <div class="input-group">
+                                                            @php
+                                                                // Nếu không đăng nhập
+                                                                $decUrl =
+                                                                    url('cart/quantityDec') .
+                                                                    '?productId=' .
+                                                                    $item['id'];
+
+                                                                // Nếu đăng nhập
+                                                                if (
+                                                                    isset($_SESSION['cart-' . $_SESSION['user']['id']])
+                                                                ) {
+                                                                    $decUrl .= '&cartID=' . $_SESSION['cart_id'];
+                                                                }
+                                                            @endphp
+                                                            <div class="input-group-prepend">
+                                                                <a href="{{ $decUrl }}"
+                                                                    class="btn btn-outline-secondary dec qtybutton">-</a>
+                                                            </div>
+                                                            <input class="form-control text-center " type="text"
+                                                                value="{{ $item['quantity'] }}" fdprocessedid="a56y6d">
+                                                            @php
+                                                                // Nếu không đăng nhập
+                                                                $incUrl =
+                                                                    url('cart/quantityInc') .
+                                                                    '?productId=' .
+                                                                    $item['id'];
+
+                                                                // Nếu đăng nhập
+                                                                if (
+                                                                    isset($_SESSION['cart-' . $_SESSION['user']['id']])
+                                                                ) {
+                                                                    $incUrl .= '&cartID=' . $_SESSION['cart_id'];
+                                                                }
+                                                            @endphp
+                                                            <div class="input-group-append">
+                                                                <a href="{{ $incUrl }}"
+                                                                    class="btn btn-outline-secondary inc qtybutton">+</a>
+                                                            </div>
+                                                        </div>
+                                                </td>
+                                                <td class="product-subtotal"><span
+                                                        class="amount">{{ number_format($item['quantity'] * ($item['discount'] ?: $item['price_regular']), 0) }}đ</span>
+                                                </td>
+                                                <td class="product-remove">
+                                                    @php
+                                                        // Nếu không đăng nhập
+                                                        $url = url('cart/remove') . '?productId=' . $item['id'];
+
+                                                        // Nếu đăng nhập
+                                                        if (isset($_SESSION['cart-' . $_SESSION['user']['id']])) {
+                                                            $url .= '&cartID=' . $_SESSION['cart_id'];
+                                                        }
+
+                                                    @endphp
+                                                    <a onclick="return confirm('Are you sure?')"
+                                                        href="{{ $url }}"><i class="fa fa-times"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            @endif
                         </div>
                         <div class="row">
                             <div class="col-12">
@@ -82,10 +135,10 @@
                                 <div class="cart-page-total">
                                     <h2>Cart totals</h2>
                                     <ul class="mb-20">
-                                        <li>Subtotal <span>$250.00</span></li>
-                                        <li>Total <span>$250.00</span></li>
+                                        {{-- <li>Subtotal <span>$250.00</span></li> --}}
+                                        <li>Total <span>{{ number_format($total, 0) }} đ</span></li>
                                     </ul>
-                                    <a class="os-btn" href="{{ $_ENV['BASE_URL'] }}/check-out"
+                                    <a class="os-btn" href="{{ url('check-out') }}"
                                         previewlistener="true">Proceed to checkout</a>
                                 </div>
                             </div>

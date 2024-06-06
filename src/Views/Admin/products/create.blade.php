@@ -24,7 +24,16 @@
                             <h6 class="m-0 font-weight-bold">{{ $title }}</h6>
                         </div>
                         <div class="card-body">
-                            <form action="" method="post" enctype="">
+                            @if (isset($_SESSION['status']) && !$_SESSION['status'])
+                                <div class="alert alert-warning">{{ $_SESSION['msg'] }}</div>
+
+                                @php
+                                    unset($_SESSION['status']);
+                                    unset($_SESSION['msg']);
+                                @endphp
+                            @endif
+
+                            <form action="{{ url('admin/products/store') }}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="card">
                                     <div
@@ -39,84 +48,105 @@
                                                     <select name="category_id" class="form-select mb-3"
                                                         fdprocessedid="m0ti7f">
                                                         <option value="">--- Choose category name ---</option>
-                                                        <option value="1">Active</option>
+                                                        @foreach ($categoriesPluck as $key => $value)
+                                                            <option {{ old('category_id') == $key ? 'selected' : '' }}
+                                                                value="{{ $key }}">{{ $value }}</option>
+                                                        @endforeach
                                                     </select>
-                                                    <span class="text-danger"></span>
+                                                    <span
+                                                        class="text-danger">{{ !empty($_SESSION['errors']['category_id']) ? $_SESSION['errors']['category_id'] : '' }}</span>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label for="form-select">Brand name:</label>
-                                                    <select name="brand_id" class="form-select mb-3" fdprocessedid="m0ti7f">
-                                                        <option value="">--- Choose brand name ---</option>
-                                                        <option value="1">Active</option>
-                                                    </select>
-                                                    <span class="text-danger"></span>
-                                                </div>
+
                                                 <div class="mb-3">
                                                     <label for="productname">SKU:</label>
                                                     <input name="sku" id="sku" type="text"
                                                         class="form-control mb-3" placeholder="Enter a sku..."
-                                                        value="" fdprocessedid="15ftra">
-                                                    <span class="text-danger"></span>
+                                                        value="{{ old('sku') ? old('sku') : '' }}" fdprocessedid="15ftra">
+                                                    <span
+                                                        class="text-danger">{{ !empty($_SESSION['errors']['sku']) ? $_SESSION['errors']['sku'] : '' }}</span>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="productname">Name:</label>
                                                     <input name="name" id="name" type="text"
                                                         class="form-control mb-3" placeholder="Enter a name..."
-                                                        value="" fdprocessedid="15ftra">
-                                                    <span class="text-danger"></span>
+                                                        value="{{ old('name') ? old('name') : '' }}"
+                                                        fdprocessedid="15ftra">
+                                                    <span
+                                                        class="text-danger">{{ !empty($_SESSION['errors']['name']) ? $_SESSION['errors']['name'] : '' }}</span>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="productname">Price:</label>
                                                     <input name="price_regular" id="price_regular" type="number"
                                                         class="form-control mb-3" placeholder="Enter a price regular..."
-                                                        value="" fdprocessedid="15ftra">
-                                                    <span class="text-danger"></span>
+                                                        value="{{ old('price_regular') ? old('price_regular') : '' }}"
+                                                        fdprocessedid="15ftra">
+                                                    <span
+                                                        class="text-danger">{{ !empty($_SESSION['errors']['price_regular']) ? $_SESSION['errors']['price_regular'] : '' }}</span>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="productname">Discount:</label>
                                                     <input name="discount" id="discount" type="number"
                                                         class="form-control mb-3" placeholder="Enter a discount..."
-                                                        value="" fdprocessedid="15ftra">
-                                                    <span class="text-danger"></span>
+                                                        value="{{ old('discount') ? old('discount') : '0' }}"
+                                                        fdprocessedid="15ftra">
+                                                    <span
+                                                        class="text-danger">{{ !empty($_SESSION['errors']['discount']) ? $_SESSION['errors']['discount'] : '' }}</span>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="productname">Thumbnail:</label>
-                                                    <input name="img_thumbnail" id="img_thumbnail" type="file"
+                                                    <input name="thumbnail" id="thumbnail" type="file"
                                                         class="form-control mb-3" value="" fdprocessedid="15ftra">
-                                                    <span class="text-danger"></span>
+                                                    <span
+                                                        class="text-danger">{{ !empty($_SESSION['errors']['thumbnail']) ? $_SESSION['errors']['thumbnail'] : '' }}</span>
                                                 </div>
                                                 <div class="mb-3">
                                                     <label for="productname">Gallery:</label>
                                                     <input multiple name="gallery[]" id="gallery" type="file"
                                                         class="form-control mb-3" value="" fdprocessedid="15ftra">
-                                                    <span class="text-danger"></span>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="productname">Over view:</label>
-                                                    <textarea placeholder="Enter a over view..." class="form-control" name="over_view" id="" cols="30"
-                                                        rows="4"></textarea>
-                                                    <span class="text-danger"></span>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="productname">Content:</label>
-                                                    <textarea placeholder="Enter a content..." class="form-control" name="content" id="" cols="30"
-                                                        rows="4"></textarea>
-                                                    <span class="text-danger"></span>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="form-select">Status:</label>
-                                                    <select name="status" class="form-select mb-3"
-                                                        fdprocessedid="m0ti7f">
-                                                        <option value="1">Active</option>
-                                                        <option value="0">Inactive</option>
-                                                    </select>
-                                                    <span class="text-danger"></span>
+                                                    <span class="text-danger">
+                                                        @if (!empty($_SESSION['errors']['gallery']) && is_array($_SESSION['errors']['gallery']))
+                                                            {{ implode(', ', $_SESSION['errors']['gallery']) }}
+                                                        @else
+                                                            {{ $_SESSION['errors']['gallery'] }}
+                                                        @endif
+                                                    </span>
+                                                    <div class="mb-3">
+                                                        <label for="productname">Descriptipn:</label>
+                                                        <textarea placeholder="Enter a over description..." class="form-control" name="description" id=""
+                                                            cols="30" rows="4">{{ old('description') ? old('description') : '' }}</textarea>
+                                                        <span
+                                                            class="text-danger">{{ !empty($_SESSION['errors']['over_view']) ? $_SESSION['errors']['over_view'] : '' }}</span>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="productname">Content:</label>
+                                                        <textarea placeholder="Enter a content..." class="form-control" name="content" id="" cols="30"
+                                                            rows="4">{{ old('content') ? old('content') : '' }}</textarea>
+                                                        <span
+                                                            class="text-danger">{{ !empty($_SESSION['errors']['content']) ? $_SESSION['errors']['content'] : '' }}</span>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="form-select">Status:</label>
+                                                        <select name="status" class="form-select mb-3"
+                                                            fdprocessedid="m0ti7f">
+                                                            <option value="">--- Choose status ---</option>
+                                                            <option
+                                                                {{ old('status') == $_ENV['STATUS_DRAFT'] ? 'selected' : '' }}
+                                                                value="{{ $_ENV['STATUS_DRAFT'] }}">Draft</option>
+                                                            <option
+                                                                {{ old('status') == $_ENV['STATUS_PENDING'] ? 'selected' : '' }}
+                                                                value="{{ $_ENV['STATUS_PENDING'] }}">Pending</option>
+                                                            <option
+                                                                {{ old('status') == $_ENV['STATUS_PUBLISH'] ? 'selected' : '' }}
+                                                                value="{{ $_ENV['STATUS_PUBLISH'] }}">Publish</option>
+                                                        </select>
+                                                        <span
+                                                            class="text-danger">{{ !empty($_SESSION['errors']['status']) ? $_SESSION['errors']['status'] : '' }}</span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-
+                                    {{-- 
                                 <div class="card">
                                     <div
                                         class="card-body py-3 d-flex justify-content-between align-items-center border-bottom">
@@ -182,19 +212,21 @@
                                             </table>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
 
-                                <div class="d-flex flex-wrap gap-2">
-                                    <button type="submit" class="btn btn-primary waves-effect waves-light"
-                                        fdprocessedid="y9s8b">
-                                        Create
-                                    </button>
-                                    <button type="reset" class="btn btn-secondary waves-effect waves-light"
-                                        fdprocessedid="u0je1s">Reset</button>
-                                    <a class="btn btn-info" href="{{ $_ENV['BASE_URL_ADMIN'] }}/products"
-                                        previewlistener="true">Back to
-                                        list</a>
-                                </div>
+
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <button type="submit" class="btn btn-primary waves-effect waves-light"
+                                            fdprocessedid="y9s8b">
+                                            Create
+                                        </button>
+                                        <button type="reset" class="btn btn-secondary waves-effect waves-light"
+                                            fdprocessedid="u0je1s">Reset</button>
+                                        <a class="btn btn-info" href="{{ url('admin/products') }}"
+                                            previewlistener="true">Back to
+                                            list</a>
+                                    </div>
+
                             </form>
 
                         </div>
@@ -208,3 +240,8 @@
         <!-- container-fluid -->
     </div>
 @endsection
+
+@php
+    unset($_SESSION['data']);
+    unset($_SESSION['errors']);
+@endphp
